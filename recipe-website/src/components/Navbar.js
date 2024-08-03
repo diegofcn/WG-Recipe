@@ -31,16 +31,16 @@ function Navbar() {
 
   return (
     <nav className="sticky w-full mt-8 z-10 transition-opacity duration-300 ease-in-out bg-white">
-      <div className="container mx-auto flex flex-col lg:flex-row items-center justify-between p-4">
-        <div className="flex justify-between w-full lg:w-auto">
+      <div className="container mx-auto flex flex-col xl:flex-row items-center justify-between p-4">
+        <div className="flex justify-between w-full xl:w-auto">
           <Link to="/" className="text-2xl font-cormorant me-6 font-semibold text-gray-700 uppercase">
             Kitchen Chaos
           </Link>
-          <button className="text-gray-700 lg:hidden" onClick={toggleMenu}>
+          <button className="text-gray-700 xl:hidden" onClick={toggleMenu}>
             {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
           </button>
         </div>
-        <div className={`flex-col lg:flex-row lg:flex lg:items-center ${isOpen ? 'flex' : 'hidden'} w-full lg:w-auto mt-4 lg:mt-0 space-y-4 lg:space-y-0 lg:space-x-10 xl:space-x-20`}>
+        <div className={`flex-col xl:flex-row xl:flex xl:items-center ${isOpen ? 'flex' : 'hidden'} w-full lg:w-auto mt-4 lg:mt-0 space-y-4 lg:space-y-0 lg:space-x-10 xl:space-x-20`}>
           <Link to="/" className="hover:text-primary text-gray-700 uppercase text-center lg:text-left">Home</Link>
           <Link to="/category/breakfast" className="hover:text-primary text-gray-700 uppercase text-center lg:text-left">Breakfast</Link>
           <Link to="/category/dinner" className="hover:text-primary text-gray-700 uppercase text-center lg:text-left">Dinner</Link>
