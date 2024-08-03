@@ -24,6 +24,7 @@ function Hero() {
           <Link to="/category/dessert" className="hover:text-primary text-gray-700 uppercase">dessert</Link>
           <Link to="/category/snacks" className="hover:text-primary text-gray-700 uppercase">snacks</Link>
           <Link to="/category/dips" className="hover:text-primary text-gray-700 uppercase">dips</Link>
+          <Link to="/category/cocktails" className="hover:text-primary text-gray-700 uppercase">Cocktails</Link>
           {isAuthenticated ? (
             <>
               <Link to="/create" className="hover:text-primary text-gray-700 uppercase text-center lg:text-left">Create</Link>

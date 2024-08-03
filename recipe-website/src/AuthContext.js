@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      axios.get('http://localhost:5000/api/auth/me', {
+      axios.get(`${process.env.REACT_APP_API_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       .then(response => {
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
   const addFavorite = async (recipeId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post(`http://localhost:5000/api/favorites/${recipeId}`, {}, {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/favorites/${recipeId}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUser(prev => ({ ...prev, favorites: response.data }));
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
   const removeFavorite = async (recipeId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.delete(`http://localhost:5000/api/favorites/${recipeId}`, {
+      const response = await axios.delete(`${process.env.REACT_APP_API_URL}/api/favorites/${recipeId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUser(prev => ({ ...prev, favorites: response.data }));

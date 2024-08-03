@@ -20,11 +20,11 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', formData);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, formData);
       const { token, userId } = response.data;
       
       // Fetch user details using the token
-      const userResponse = await axios.get('http://localhost:5000/api/auth/me', {
+      const userResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

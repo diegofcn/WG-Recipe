@@ -14,7 +14,7 @@ function RecipeDetail() {
     useEffect(() => {
         const fetchRecipe = async () => {
             try {
-                const response = await axios.get(`http://localhost:5000/recipes/${recipeId}`);
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/recipes/${recipeId}`);
                 setRecipe(response.data);
             } catch (error) {
                 console.error("Failed to fetch recipe:", error);
@@ -38,7 +38,7 @@ function RecipeDetail() {
           console.log('Deleting recipe with ID:', recipeId);
           console.log('Authorization Token:', token);
     
-          await axios.delete(`http://localhost:5000/recipes/${recipeId}`, {
+          await axios.delete(`${process.env.REACT_APP_API_URL}/recipes/${recipeId}`, {
             headers: {
               Authorization: `Bearer ${token}`
             }

@@ -24,7 +24,7 @@ function CreateRecipe() {
   useEffect(() => {
     if (recipeId) {
         setLoading(true);
-        axios.get(`http://localhost:5000/recipes/${recipeId}`)
+        axios.get(`${process.env.REACT_APP_API_URL}/recipes/${recipeId}`)
             .then(response => {
                 setRecipe(response.data);
             })
@@ -89,7 +89,7 @@ const removeInstruction = index => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const method = recipeId ? 'patch' : 'post';
-    const url = recipeId ? `http://localhost:5000/recipes/${recipeId}` : 'http://localhost:5000/recipes';
+    const url = recipeId ? `${process.env.REACT_APP_API_URL}/recipes/${recipeId}` : `${process.env.REACT_APP_API_URL}/recipes`;
   
     try {
       const token = localStorage.getItem('token');
@@ -149,6 +149,7 @@ if (loading) return <p>Loading...</p>;
                   <option value="dessert">Dessert</option>
                   <option value="dips">Dips</option>
                   <option value="snacks">Snacks</option>
+                  <option value="cocktails">Cocktails</option>
               </select>
             </div>
 

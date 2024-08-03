@@ -47,6 +47,7 @@ function Navbar() {
           <Link to="/category/dessert" className="hover:text-primary text-gray-700 uppercase text-center lg:text-left">Dessert</Link>
           <Link to="/category/snacks" className="hover:text-primary text-gray-700 uppercase text-center lg:text-left">Snacks</Link>
           <Link to="/category/dips" className="hover:text-primary text-gray-700 uppercase text-center lg:text-left">Dips</Link>
+          <Link to="/category/cocktails" className="hover:text-primary text-gray-700 uppercase text-center lg:text-left">Cocktails</Link>
           {isAuthenticated ? (
             <>
               <Link to="/create" className="hover:text-primary text-gray-700 uppercase text-center lg:text-left">Create</Link>
