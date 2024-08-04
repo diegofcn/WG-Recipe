@@ -86,11 +86,12 @@ function RecipeDetail() {
           removeFromShoppingList(ingredientWithRecipeId);
           return prev.filter(item => item !== ingredient.name);
         } else {
-          addToShoppingList(ingredientWithRecipeId);
+          addToShoppingList(ingredientWithRecipeId, recipe.title);
           return [...prev, ingredient.name];
         }
       });
     };
+  
     
 
     if (loading) return <p>Loading...</p>;

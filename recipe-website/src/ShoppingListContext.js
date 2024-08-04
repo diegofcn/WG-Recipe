@@ -12,10 +12,10 @@ export const ShoppingListProvider = ({ children }) => {
     localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
   }, [shoppingList]);
 
-  const addToShoppingList = (ingredient) => {
+  const addToShoppingList = (ingredient, recipeName) => {
     setShoppingList((prevList) => {
       if (!prevList.some(item => item.name === ingredient.name && item.recipeId === ingredient.recipeId)) {
-        return [...prevList, ingredient];
+        return [...prevList, { ...ingredient, recipeName }];
       }
       return prevList;
     });
