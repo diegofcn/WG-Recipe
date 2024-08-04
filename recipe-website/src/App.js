@@ -9,6 +9,7 @@ import Navbar from './components/Navbar';
 import CreateRecipe from './components/CreateRecipe';
 import { AuthContext } from './AuthContext';
 import Favorites from './components/Favorites';
+import ShoppingList from './components/ShoppingList';
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
         <Route path="/api/auth/login" element={<Login />} />
         {isAuthenticated && <Route path="/create" element={<CreateRecipe />} />}
         {isAuthenticated && <Route path="/favorites" element={<Favorites />} />}
+        <Route path="/shopping-list" element={<ShoppingList />} />
           <Route path="/category/:categoryName" element={<RecipesList />} />
           <Route path="/recipe/:recipeId" element={<RecipeDetail />} />
           {isAuthenticated && <Route path="/edit-recipe/:recipeId" element={<CreateRecipe />} />}

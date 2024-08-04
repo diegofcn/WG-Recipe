@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { FaRegClock } from "react-icons/fa";
 import { AuthContext } from '../AuthContext';
+import { ShoppingListContext } from '../ShoppingListContext';
 
 function RecipeDetail() {
     const { recipeId } = useParams();
@@ -10,6 +11,12 @@ function RecipeDetail() {
     const [recipe, setRecipe] = useState(null);
     const [loading, setLoading] = useState(true);
     const { user, addFavorite, removeFavorite  } = useContext(AuthContext);
+    const { addToShoppingList, removeFromShoppingList, shoppingList } = useContext(ShoppingListContext);
+    const [clickedIngredients, setClickedIngredients] = useState(() => {
+      // Load the clicked ingredients from local storage on initialization
+      const savedClickedIngredients = localStorage.getItem('clickedIngredients');
+      return savedClickedIngredients ? JSON.parse(savedClickedIngredients) : [];
+    });
 
     useEffect(() => {
         const fetchRecipe = async () => {
@@ -25,6 +32,11 @@ function RecipeDetail() {
         };
         fetchRecipe();
     }, [recipeId]);
+
+    useEffect(() => {
+      // Update clickedIngredients based on the current shopping list
+      setClickedIngredients(shoppingList.map(item => item.name));
+    }, [shoppingList]);
 
     const handleDelete = async () => {
       if (window.confirm("Are you sure you want to delete this recipe?")) {
@@ -60,6 +72,18 @@ function RecipeDetail() {
         addFavorite(recipeId);
       }
     };
+
+    const handleIngredientClick = (ingredient) => {
+      setClickedIngredients((prev) => {
+        if (prev.includes(ingredient.name)) {
+          removeFromShoppingList(ingredient);
+          return prev.filter(item => item !== ingredient.name);
+        } else {
+          addToShoppingList(ingredient);
+          return [...prev, ingredient.name];
+        }
+      });
+    };
     
 
     if (loading) return <p>Loading...</p>;
@@ -67,9 +91,6 @@ function RecipeDetail() {
 
     const isOwner = user && recipe.user === user._id;
     const isFavorite = user && user.favorites && user.favorites.includes(recipeId);
-    console.log(recipe)
-    console.log("fav", isFavorite)
-    console.log(user)
 
     return (
       <div className="flex justify-center">
@@ -92,12 +113,16 @@ function RecipeDetail() {
               <h2 className="text-xl font-semibold mb-2 tracking-widest mt-16 uppercase">Ingredients</h2>
               <hr className='mb-6'/>
               <div className="mb-4">
-                {recipe.ingredients.map((ingredient, index) => (
-                  <div key={index} className="flex justify-start items-center space-x-24 mb-2">
-                    <span className="font-semibold w-20">{ingredient.amount}</span>
-                    <span className="flex-1 text-left">{ingredient.name}</span>
-                  </div>
-                ))}
+              {recipe.ingredients.map((ingredient, index) => (
+                <div
+                  key={index}
+                  className={`flex justify-start items-center space-x-24 mb-2 p-2 rounded cursor-pointer ${clickedIngredients.includes(ingredient.name) ? 'bg-gray-200 line-through' : 'hover:bg-gray-100'}`}
+                  onClick={() => handleIngredientClick(ingredient)}
+                >
+                  <span className="font-semibold w-20">{ingredient.amount}</span>
+                  <span className="flex-1 text-left">{ingredient.name}</span>
+                </div>
+              ))}
               </div>
             </div>
             <div className="bg-sky-100 p-4 rounded-lg mt-16">
