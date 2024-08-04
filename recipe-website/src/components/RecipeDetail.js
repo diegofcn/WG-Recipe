@@ -13,8 +13,7 @@ function RecipeDetail() {
     const { user, addFavorite, removeFavorite  } = useContext(AuthContext);
     const { addToShoppingList, removeFromShoppingList, shoppingList } = useContext(ShoppingListContext);
     const [clickedIngredients, setClickedIngredients] = useState(() => {
-      // Load the clicked ingredients from local storage on initialization
-      const savedClickedIngredients = localStorage.getItem('clickedIngredients');
+      const savedClickedIngredients = localStorage.getItem(`clickedIngredients_${recipeId}`);
       return savedClickedIngredients ? JSON.parse(savedClickedIngredients) : [];
     });
 
@@ -34,9 +33,16 @@ function RecipeDetail() {
     }, [recipeId]);
 
     useEffect(() => {
+      localStorage.setItem(`clickedIngredients_${recipeId}`, JSON.stringify(clickedIngredients));
+    }, [clickedIngredients, recipeId]);
+
+    useEffect(() => {
       // Update clickedIngredients based on the current shopping list
-      setClickedIngredients(shoppingList.map(item => item.name));
-    }, [shoppingList]);
+      const savedClickedIngredients = shoppingList
+        .filter(item => item.recipeId === recipeId)
+        .map(item => item.name);
+      setClickedIngredients(savedClickedIngredients);
+    }, [shoppingList, recipeId]);
 
     const handleDelete = async () => {
       if (window.confirm("Are you sure you want to delete this recipe?")) {
@@ -74,12 +80,13 @@ function RecipeDetail() {
     };
 
     const handleIngredientClick = (ingredient) => {
+      const ingredientWithRecipeId = { ...ingredient, recipeId };
       setClickedIngredients((prev) => {
         if (prev.includes(ingredient.name)) {
-          removeFromShoppingList(ingredient);
+          removeFromShoppingList(ingredientWithRecipeId);
           return prev.filter(item => item !== ingredient.name);
         } else {
-          addToShoppingList(ingredient);
+          addToShoppingList(ingredientWithRecipeId);
           return [...prev, ingredient.name];
         }
       });

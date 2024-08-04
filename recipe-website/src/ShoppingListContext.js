@@ -14,7 +14,7 @@ export const ShoppingListProvider = ({ children }) => {
 
   const addToShoppingList = (ingredient) => {
     setShoppingList((prevList) => {
-      if (!prevList.some(item => item.name === ingredient.name)) {
+      if (!prevList.some(item => item.name === ingredient.name && item.recipeId === ingredient.recipeId)) {
         return [...prevList, ingredient];
       }
       return prevList;
@@ -22,13 +22,12 @@ export const ShoppingListProvider = ({ children }) => {
   };
 
   const removeFromShoppingList = (ingredient) => {
-    setShoppingList((prevList) => prevList.filter(item => item.name !== ingredient.name));
+    setShoppingList((prevList) => prevList.filter(item => !(item.name === ingredient.name && item.recipeId === ingredient.recipeId)));
   };
 
   const clearShoppingList = () => {
     setShoppingList([]);
     localStorage.removeItem('shoppingList');
-    localStorage.removeItem('clickedIngredients');
   };
 
   return (
