@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { FaRegClock } from "react-icons/fa";
+import { FaRegClock, FaHeart, FaRegHeart, FaTrash, FaEdit } from "react-icons/fa";
 import { AuthContext } from '../AuthContext';
 import { ShoppingListContext } from '../ShoppingListContext';
 
@@ -106,17 +106,21 @@ function RecipeDetail() {
         <div className="w-full 2xl:w-3/5 p-8 grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
           <div className='lg:mt-16 mt-4 lg:col-span-1'>
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl capitalize font-fancy text-blue-300 tracking-widest text-left mb-8">{recipe.title}</h1>
+            <div className='flex ps-10 mt-12'>
             { isOwner && (
             <>
-              <button onClick={handleDelete} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                Delete Recipe
+              <button onClick={handleDelete} className='w-12'>
+              <FaTrash className='cursor-pointer text-slate-600 text-xl'/>
               </button>
-              <Link to={`/edit-recipe/${recipeId}`} className="text-blue-500 ml-4">Edit</Link>
+              <button className='w-12'>
+              <Link to={`/edit-recipe/${recipeId}`} className='text-slate-600 text-xl'><FaEdit /></Link>
+              </button>
             </>
           )}
-          <button onClick={handleFavorite} className={`bg-${isFavorite ? 'red' : 'green'}-500 hover:bg-${isFavorite ? 'red' : 'green'}-700 text-red font-bold py-2 px-4 rounded mt-4`}>
-            {isFavorite ? 'Unfavorite' : 'Favorite'}
+          <button onClick={handleFavorite} className='w-12'>
+            {isFavorite ? <FaHeart className='text-red-600 text-xl' /> : <FaRegHeart className='text-slate-600 text-xl'/>}
           </button>
+          </div>
             <div className='p-4'>
               <h2 className="text-xl font-semibold mb-2 tracking-widest mt-16 uppercase">Ingredients</h2>
               <hr className='mb-6'/>
