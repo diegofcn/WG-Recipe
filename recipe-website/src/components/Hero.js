@@ -32,8 +32,7 @@ function Hero() {
             </>
           ) : (
             <>
-              <Link to="/api/auth/login" className="hover:text-primary text-gray-700 uppercase text-center lg:text-left">Login</Link>
-              <Link to="/api/auth/register" className="hover:text-primary text-gray-700 uppercase text-center lg:text-left">Register</Link>
+              <Link to="/api/auth/login" className="hover:text-primary text-gray-700 uppercase text-center lg:text-left">Login / Register</Link>
             </>
           )}
         </div>
