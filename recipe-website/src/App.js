@@ -10,6 +10,7 @@ import CreateRecipe from './components/CreateRecipe';
 import { AuthContext } from './AuthContext';
 import Favorites from './components/Favorites';
 import ShoppingList from './components/ShoppingList';
+import SearchRecipes from './components/SearchRecipes';
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/shopping-list" element={<ShoppingList />} />
           <Route path="/category/:categoryName" element={<RecipesList />} />
           <Route path="/recipe/:recipeId" element={<RecipeDetail />} />
+          <Route path="/search" element={< SearchRecipes />} />
           {isAuthenticated && <Route path="/edit-recipe/:recipeId" element={<CreateRecipe />} />}
         </Routes>
       </div>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from "axios";
+import { FaTrashAlt } from 'react-icons/fa';
 
 function CreateRecipe() {
   const { recipeId } = useParams();  // This will be undefined if creating a new recipe
@@ -18,8 +19,10 @@ function CreateRecipe() {
       protein: "",
       fat: "",
     },
+    tags: []
   });
   const [loading, setLoading] = useState(false);
+  const [tagInput, setTagInput] = useState("");
 
   useEffect(() => {
     if (recipeId) {
@@ -39,6 +42,25 @@ function CreateRecipe() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setRecipe({ ...recipe, [name]: value });
+  };
+
+  const handleTagInput = (e) => {
+    setTagInput(e.target.value);
+  };
+
+  const addTag = () => {
+    setRecipe({
+      ...recipe,
+      tags: [...recipe.tags, tagInput]
+    });
+    setTagInput("");
+  };
+
+  const removeTag = (tag) => {
+    setRecipe({
+      ...recipe,
+      tags: recipe.tags.filter(t => t !== tag)
+    });
   };
 
   const handleIngredientChange = (index, event) => {
@@ -98,22 +120,37 @@ const removeInstruction = index => {
         return;
       }
   
+      // Log the method, URL, and recipe data being submitted
+      console.log("Request Method:", method);
+      console.log("Request URL:", url);
+      console.log("Recipe Data:", recipe);
+  
       const response = await axios({
         method: method,
         url: url,
         data: recipe,
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       });
+  
+      // Log the response from the server
+      console.log("Response Data:", response.data);
   
       alert(`Recipe ${recipeId ? 'updated' : 'created'} successfully!`);
       navigate(`/recipe/${response.data._id}`);
     } catch (error) {
+      // Log the error details
+      console.error("Error Status:", error.response ? error.response.status : "No status");
+      console.error("Error Data:", error.response ? error.response.data : "No response data");
+      console.error("Error Headers:", error.response ? error.response.headers : "No response headers");
+      console.error("Error Message:", error.message);
+  
       alert(`Failed to ${recipeId ? 'update' : 'create'} recipe`);
-      console.error(error);
     }
   };
+  
   
 
 if (loading) return <p>Loading...</p>;
@@ -168,6 +205,40 @@ if (loading) return <p>Loading...</p>;
                 <input type="text" name="imageUrl" id="imageUrl" value={recipe.imageUrl} onChange={handleInputChange}
                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
             </div>
+
+            <div className="mb-4">
+          <h3 className="block text-gray-700 text-sm font-bold mb-2">Tags</h3>
+          <div className="flex">
+            <input
+              type="text"
+              value={tagInput}
+              onChange={handleTagInput}
+              placeholder="Enter a tag"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+            <button
+              type="button"
+              onClick={addTag}
+              className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Add
+            </button>
+          </div>
+          <div className="flex flex-wrap mt-2">
+            {recipe.tags.map((tag, index) => (
+              <div key={index} className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                {tag}
+                <button
+                  type="button"
+                  onClick={() => removeTag(tag)}
+                  className="ml-2 text-red-500 hover:text-red-700"
+                >
+                  <FaTrashAlt />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
 
             <div className="mb-4">
               <h3 className="block text-gray-700 text-sm font-bold mb-2">Instructions</h3>

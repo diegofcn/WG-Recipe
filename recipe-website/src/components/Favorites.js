@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../AuthContext';
+import RecipeCard from './RecipeCard';
 import { FaHeart } from 'react-icons/fa';
 
 const Favorites = () => {
@@ -40,22 +41,8 @@ const Favorites = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
             {favorites.map(recipe => (
-              <div key={recipe._id} className="relative flex flex-row bg-white shadow-lg rounded-lg overflow-hidden hover:bg-gray-200 transition-colors duration-200 ease-in-out">
-                <Link to={`/recipe/${recipe._id}`} className="w-full flex flex-row">
-                  <img src={recipe.imageUrl} alt={recipe.title} className="w-1/3 object-cover"/>
-                  <div className="p-16 flex flex-col justify-between w-2/3">
-                    <h3 className="text-lg capitalize font-semibold">{recipe.title}</h3>
-                    <p className="text-gray-600">{recipe.duration}</p>
-                  </div>
-                </Link>
-                <button
-                  onClick={() => handleUnfavorite(recipe._id)}
-                  className="absolute top-4 right-4 text-2xl text-slate-300"
-                >
-                  <FaHeart />
-                </button>
-              </div>
-            ))}
+            <RecipeCard key={recipe._id} recipe={recipe} user={user} handleFavorite={handleUnfavorite} />
+          ))}
           </div>
         )}
       </div>

@@ -53,6 +53,36 @@ app.post('/recipes', auth, async (req, res) => {
     }
   });
 
+  app.get('/recipes/search', async (req, res) => {
+    const { title, tags } = req.query;
+    let query = {};
+  
+    if (title) {
+      query.title = { $regex: title, $options: 'i' }; // Case insensitive search
+    }
+  
+    if (tags) {
+      query.tags = { $in: tags.split(',') };
+    }
+  
+    try {
+      const recipes = await Recipe.find(query);
+      res.json(recipes);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching recipes', error });
+    }
+  });
+
+  // Endpoint to fetch all available tags
+app.get('/tags', async (req, res) => {
+  try {
+    const tags = await Recipe.distinct('tags');
+    res.json(tags);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching tags', error });
+  }
+});
+
 app.get('/recipes', async (req, res) => {
     try {
       const recipes = await Recipe.find();
@@ -74,30 +104,47 @@ app.get('/recipes/:id', async (req, res) => {
 });
 
 app.patch('/recipes/:id', auth, async (req, res) => {
-    const { id } = req.params;
-    const updateData = req.body;
-  
-    try {
-      const recipe = await Recipe.findById(id);
-      if (!recipe) return res.status(404).send('Recipe not found');
-  
-      if (recipe.user.toString() !== req.user.id) {
-        return res.status(403).send('User not authorized');
-      }
-  
-      if (updateData.instructions && updateData.instructions.length) {
-        updateData.instructions.forEach((instruction, index) => {
-          instruction.stepNumber = index + 1;
-        });
-      }
-  
-      Object.assign(recipe, updateData);
-      await recipe.save();
-      res.send(recipe);
-    } catch (error) {
-      res.status(400).send(error);
+  const { id } = req.params;
+  const updateData = req.body;
+
+  console.log("Patch Request ID:", id);
+  console.log("Update Data:", updateData);
+
+  try {
+    const recipe = await Recipe.findById(id);
+    if (!recipe) {
+      console.log("Recipe not found");
+      return res.status(404).send('Recipe not found');
     }
-  });
+
+    if ((!recipe.user || recipe.user.toString() !== req.user.id) && req.user.role !== 'admin') {
+      console.log("User not authorized");
+      return res.status(403).send('User not authorized');
+  }
+
+    if (updateData.instructions && updateData.instructions.length) {
+      updateData.instructions.forEach((instruction, index) => {
+        instruction.stepNumber = index + 1;
+      });
+    }
+
+    // If recipe.user is missing, set it to the admin's ID
+    if (!recipe.user && req.user.role === 'admin') {
+      recipe.user = req.user.id;
+  }
+
+    Object.assign(recipe, updateData);
+    await recipe.save();
+
+    console.log("Updated Recipe:", recipe);
+
+    res.send(recipe);
+  } catch (error) {
+    console.error("Error saving recipe:", error.message);
+    res.status(400).send({ message: error.message });
+  }
+});
+
 
   app.delete('/recipes/:id', auth, async (req, res) => {
     const { id } = req.params;
@@ -111,7 +158,7 @@ app.patch('/recipes/:id', auth, async (req, res) => {
         return res.status(404).send("No recipe found.");
       }
   
-      if (recipe.user.toString() !== req.user.id) {
+      if (recipe.user.toString() !== req.user.id && req.user.role !== 'admin') {
         console.log('User not authorized');
         return res.status(403).send('User not authorized');
       }
@@ -233,3 +280,5 @@ app.post('/api/upload', auth, async (req, res) => {
     res.status(500).json({ message: 'Failed to upload image', error: error.message });
   }
 });
+
+

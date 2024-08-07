@@ -97,7 +97,7 @@ function RecipeDetail() {
     if (loading) return <p>Loading...</p>;
     if (!recipe) return <p>No recipe found</p>;
 
-    const isOwner = user && recipe.user === user._id;
+    const isOwner = user && (recipe.user === user._id || user.role === 'admin');
     const isFavorite = user && user.favorites && user.favorites.includes(recipeId);
 
     return (
@@ -187,6 +187,17 @@ function RecipeDetail() {
                   </React.Fragment>
               ))}
             </div>
+            {recipe.tags && recipe.tags.length > 0 && (
+            <div className='mt-4'>
+              <h2 className="text-xl font-semibold mb-2 uppercase tracking-widest">Tags</h2>
+              <hr className='mb-6'/>
+              <div className="flex flex-wrap">
+                {recipe.tags.map((tag, index) => (
+                  <span key={index} className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{tag}</span>
+                ))}
+              </div>
+            </div>
+          )}
           </div>
         </div>
         <div className="hidden 2xl:block 2xl:w-1/5"></div> {/* Right empty space */}

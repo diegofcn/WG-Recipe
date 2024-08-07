@@ -29,7 +29,8 @@ const recipeSchema = new Schema({
   ingredients: [ingredientSchema],
   instructions: [instructionSchema],
   macros: macrosSchema,
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  tags: { type: [String], required: false }
 });
 
 const Recipe = mongoose.model('Recipe', recipeSchema);
