@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FaRegClock, FaHeart, FaRegHeart, FaTrash, FaEdit } from "react-icons/fa";
 import { AuthContext } from '../AuthContext';
 import { ShoppingListContext } from '../ShoppingListContext';
+import { toast } from 'react-toastify';
 
 function RecipeDetail() {
     const { recipeId } = useParams();
@@ -62,7 +63,7 @@ function RecipeDetail() {
             }
           });
     
-          alert("Recipe deleted successfully");
+          toast.success("Recipe deleted successfully");
           navigate('/'); 
         } catch (error) {
           console.error("Failed to delete recipe:", error);

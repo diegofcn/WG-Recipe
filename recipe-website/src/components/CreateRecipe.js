@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { FaTrashAlt } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 function CreateRecipe() {
   const { recipeId } = useParams();  // This will be undefined if creating a new recipe
@@ -138,7 +139,7 @@ const removeInstruction = index => {
       // Log the response from the server
       console.log("Response Data:", response.data);
   
-      alert(`Recipe ${recipeId ? 'updated' : 'created'} successfully!`);
+      toast.success(`Recipe ${recipeId ? 'updated' : 'created'} successfully!`);
       navigate(`/recipe/${response.data._id}`);
     } catch (error) {
       // Log the error details
@@ -156,185 +157,228 @@ const removeInstruction = index => {
 if (loading) return <p>Loading...</p>;
 
 
-  return (
-    <div className="max-w-4xl mx-auto p-5">
-        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-32 mb-4">
-            <h2 className="block text-gray-700 text-xl font-bold mb-6">Create Recipe</h2>
-            
-            <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
-                    Title
-                </label>
-                <input type="text" name="title" id="title" value={recipe.title} onChange={handleInputChange}
-                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-            </div>
+return (
+  <div className="max-w-4xl mx-auto p-5">
+    <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-8 mt-20">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">Create Recipe</h2>
+      
+      <div className="mb-6">
+        <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="title">Title</label>
+        <input
+          type="text"
+          name="title"
+          id="title"
+          value={recipe.title}
+          onChange={handleInputChange}
+          className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+        />
+      </div>
 
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="category">
-                  Category
-              </label>
-              <select 
-                  name="category" 
-                  id="category" 
-                  value={recipe.category} 
-                  onChange={handleInputChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      <div className="mb-6">
+        <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="category">Category</label>
+        <select
+          name="category"
+          id="category"
+          value={recipe.category}
+          onChange={handleInputChange}
+          className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+        >
+          <option value="">Select a category</option>
+          <option value="breakfast">Breakfast</option>
+          <option value="dinner">Dinner</option>
+          <option value="dessert">Dessert</option>
+          <option value="dips">Dips</option>
+          <option value="snacks">Snacks</option>
+          <option value="cocktails">Cocktails</option>
+        </select>
+      </div>
+
+      <div className="mb-6">
+        <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="duration">Duration</label>
+        <input
+          type="text"
+          name="duration"
+          id="duration"
+          value={recipe.duration}
+          onChange={handleInputChange}
+          className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+        />
+      </div>
+
+      <div className="mb-6">
+        <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="imageUrl">Image URL</label>
+        <input
+          type="text"
+          name="imageUrl"
+          id="imageUrl"
+          value={recipe.imageUrl}
+          onChange={handleInputChange}
+          className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+        />
+      </div>
+
+      <div className="mb-6">
+        <h3 className="block text-gray-700 text-sm font-semibold mb-2">Tags</h3>
+        <div className="flex items-center">
+          <input
+            type="text"
+            value={tagInput}
+            onChange={handleTagInput}
+            placeholder="Enter a tag"
+            className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+          />
+          <button
+            type="button"
+            onClick={addTag}
+            className="ml-2 bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700"
+          >
+            Add
+          </button>
+        </div>
+        <div className="flex flex-wrap mt-4">
+          {recipe.tags.map((tag, index) => (
+            <div key={index} className="flex items-center bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+              {tag}
+              <button
+                type="button"
+                onClick={() => removeTag(tag)}
+                className="ml-2 text-red-500 hover:text-red-700"
               >
-                  <option value="">Select a category</option>
-                  <option value="breakfast">Breakfast</option>
-                  <option value="dinner">Dinner</option>
-                  <option value="dessert">Dessert</option>
-                  <option value="dips">Dips</option>
-                  <option value="snacks">Snacks</option>
-                  <option value="cocktails">Cocktails</option>
-              </select>
+                <FaTrashAlt />
+              </button>
             </div>
+          ))}
+        </div>
+      </div>
 
-            <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="duration">
-                    Duration
-                </label>
-                <input type="text" name="duration" id="duration" value={recipe.duration} onChange={handleInputChange}
-                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-            </div>
-
-            <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="imageUrl">
-                    Image URL
-                </label>
-                <input type="text" name="imageUrl" id="imageUrl" value={recipe.imageUrl} onChange={handleInputChange}
-                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-            </div>
-
-            <div className="mb-4">
-          <h3 className="block text-gray-700 text-sm font-bold mb-2">Tags</h3>
-          <div className="flex">
-            <input
-              type="text"
-              value={tagInput}
-              onChange={handleTagInput}
-              placeholder="Enter a tag"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      <div className="mb-6">
+        <h3 className="block text-gray-700 text-sm font-semibold mb-2">Instructions</h3>
+        {recipe.instructions.map((instruction, index) => (
+          <div key={index} className="mb-4">
+            <label className="block text-gray-700 text-sm font-semibold mb-1" htmlFor={`instruction-${index}`}>
+              Step {index + 1}
+            </label>
+            <textarea
+              id={`instruction-${index}`}
+              name="description"
+              rows={3}
+              value={instruction.description}
+              onChange={e => handleInstructionChange(index, e)}
+              placeholder="Describe this step"
+              className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
             />
             <button
               type="button"
-              onClick={addTag}
-              className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => removeInstruction(index)}
+              className="text-red-500 hover:text-red-700 text-sm mt-2"
             >
-              Add
+              Remove Step
             </button>
           </div>
-          <div className="flex flex-wrap mt-2">
-            {recipe.tags.map((tag, index) => (
-              <div key={index} className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
-                {tag}
-                <button
-                  type="button"
-                  onClick={() => removeTag(tag)}
-                  className="ml-2 text-red-500 hover:text-red-700"
-                >
-                  <FaTrashAlt />
-                </button>
-              </div>
-            ))}
+        ))}
+        <button
+          type="button"
+          onClick={addInstruction}
+          className="mt-4 bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700"
+        >
+          Add New Step
+        </button>
+      </div>
+
+      <div className="mb-6">
+        <h3 className="block text-gray-700 text-sm font-semibold mb-2">Ingredients</h3>
+        {recipe.ingredients.map((ingredient, index) => (
+          <div key={index} className="flex items-center mb-2">
+            <input
+              type="text"
+              placeholder="Name"
+              name="name"
+              value={ingredient.name}
+              onChange={event => handleIngredientChange(index, event)}
+              className="flex-grow px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 focus:outline-none mr-2"
+            />
+            <input
+              type="text"
+              placeholder="Amount"
+              name="amount"
+              value={ingredient.amount}
+              onChange={event => handleIngredientChange(index, event)}
+              className="flex-grow px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 focus:outline-none mr-2"
+            />
+            
           </div>
+        ))}
+        <button
+          type="button"
+          onClick={addIngredient}
+          className="mt-4 bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700"
+        >
+          Add Ingredient
+        </button>
+      </div>
+
+      <div className="mb-6">
+        <h3 className="block text-gray-700 text-md font-semibold mb-2">Macros</h3>
+        <div className="mb-4">
+          <label htmlFor="calories" className="block text-gray-700 text-sm font-semibold mb-1">Calories</label>
+          <input
+            type="text"
+            id="calories"
+            name="calories"
+            placeholder="Calories"
+            value={recipe.macros.calories}
+            onChange={handleMacroChange}
+            className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+          />
         </div>
+        <div className="mb-4">
+          <label htmlFor="carbs" className="block text-gray-700 text-sm font-semibold mb-1">Carbs</label>
+          <input
+            type="text"
+            id="carbs"
+            name="carbs"
+            placeholder="Carbs"
+            value={recipe.macros.carbs}
+            onChange={handleMacroChange}
+            className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="protein" className="block text-gray-700 text-sm font-semibold mb-1">Protein</label>
+          <input
+            type="text"
+            id="protein"
+            name="protein"
+            placeholder="Protein"
+            value={recipe.macros.protein}
+            onChange={handleMacroChange}
+            className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="fat" className="block text-gray-700 text-sm font-semibold mb-1">Fat</label>
+          <input
+            type="text"
+            id="fat"
+            name="fat"
+            placeholder="Fat"
+            value={recipe.macros.fat}
+            onChange={handleMacroChange}
+            className="w-full px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+          />
+        </div>
+      </div>
 
-            <div className="mb-4">
-              <h3 className="block text-gray-700 text-sm font-bold mb-2">Instructions</h3>
-              {recipe.instructions.map((instruction, index) => (
-                  <div key={index} className="mb-2">
-                      <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor={`instruction-${index}`}>
-                          Step {index + 1}
-                      </label>
-                      <textarea
-                          id={`instruction-${index}`}
-                          name="description"
-                          rows={3}
-                          value={instruction.description}
-                          onChange={e => handleInstructionChange(index, e)}
-                          placeholder="Describe this step"
-                          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      />
-                      <button type="button" onClick={() => removeInstruction(index)}
-                          className="text-red-500 hover:text-red-700 text-sm py-1 px-2 mt-1">
-                          Remove Step
-                      </button>
-                  </div>
-              ))}
-              <button type="button" onClick={addInstruction}
-                  className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                  Add New Step
-              </button>
-            </div>
-
-            <div className="mb-4">
-                <h3 className="block text-gray-700 text-sm font-bold mb-2">Ingredients</h3>
-                {recipe.ingredients.map((ingredient, index) => (
-                    <div key={index} className="mb-2">
-                      <input type="text" placeholder="Name" name="name"
-                               value={ingredient.name}
-                               onChange={event => handleIngredientChange(index, event)}
-                               className="shadow appearance-none border rounded py-2 px-3 text-gray-700 mr-2 w-full md:w-auto"/>
-                        <input type="text" placeholder="Amount" name="amount"
-                               value={ingredient.amount}
-                               onChange={event => handleIngredientChange(index, event)}
-                               className="shadow appearance-none border rounded py-2 px-3 text-gray-700 mr-2 w-full md:w-auto"/>
-                        
-                    </div>
-                ))}
-                <button type="button" onClick={addIngredient}
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    Add Ingredient
-                </button>
-            </div>
-
-            <div className="mb-6">
-    <h3 className="block text-gray-700 text-md font-bold mb-2">Macros</h3>
-    <div className="mb-2">
-        <label htmlFor="calories" className="block text-gray-700 text-sm font-bold mb-1">
-            Calories
-        </label>
-        <input type="text" id="calories" name="calories" placeholder="Calories" 
-               value={recipe.macros.calories} onChange={handleMacroChange}
-               className="shadow appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
-    </div>
-    <div className="mb-2">
-        <label htmlFor="carbs" className="block text-gray-700 text-sm font-bold mb-1">
-            Carbs
-        </label>
-        <input type="text" id="carbs" name="carbs" placeholder="Carbs"
-               value={recipe.macros.carbs} onChange={handleMacroChange}
-               className="shadow appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
-    </div>
-    <div className="mb-2">
-        <label htmlFor="protein" className="block text-gray-700 text-sm font-bold mb-1">
-            Protein
-        </label>
-        <input type="text" id="protein" name="protein" placeholder="Protein"
-               value={recipe.macros.protein} onChange={handleMacroChange}
-               className="shadow appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
-    </div>
-    <div className="mb-2">
-        <label htmlFor="fat" className="block text-gray-700 text-sm font-bold mb-1">
-            Fat
-        </label>
-        <input type="text" id="fat" name="fat" placeholder="Fat"
-               value={recipe.macros.fat} onChange={handleMacroChange}
-               className="shadow appearance-none border rounded w-50 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"/>
-    </div>
-</div>
-
-
-
-            <div className="flex items-center justify-between">
-                <button type="submit"
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    Submit
-                </button>
-            </div>
-        </form>
-    </div>
+      <div className="flex items-center justify-between">
+        <button
+          type="submit"
+          className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-200"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
 );
 }
 

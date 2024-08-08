@@ -6,6 +6,7 @@ import QRCode from 'qrcode.react';
 import axios from 'axios';
 import { AuthContext } from '../AuthContext';
 import { FaSpinner } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 function ShoppingList() {
   const { shoppingList, removeFromShoppingList, clearShoppingList } = useContext(ShoppingListContext);
@@ -80,7 +81,7 @@ function ShoppingList() {
 
   return (
     <div id="shopping-list" className="max-w-4xl mx-auto p-5">
-      <h2 className="text-2xl font-bold mb-6 text-center">Shopping List</h2>
+      <h2 className="text-2xl md:text-4xl xl:text-6xl font-cormorant mb-6 text-center">Shopping List</h2>
       {shoppingList.length === 0 ? (
         <p className="text-center text-lg">Your shopping list is empty.</p>
       ) : (
@@ -93,7 +94,7 @@ function ShoppingList() {
                   <div className="font-bold text-lg mb-2">{name}</div>
                   {items.map((item, subIndex) => (
                     <div key={subIndex} className="flex justify-between items-center">
-                      <span className="block">{item.amount} (Recipe: {item.recipeName})</span>
+                      <span className="block">{item.amount} <Link to={`/recipe/${item.recipeId}`} className="ms-6 text-sm font-thin">{"(" + item.recipeName + ")"}</Link></span>
                       <button
                         onClick={() => removeFromShoppingList(item)}
                         className="text-red-500 hover:text-red-700 ml-4"

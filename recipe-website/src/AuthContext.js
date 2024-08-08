@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export const AuthContext = createContext();
 
@@ -32,6 +33,7 @@ export const AuthProvider = ({ children }) => {
     setUser(user);
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user)); // Store user ID or other user details if needed
+    toast.success('Login successfully!');  
   };
 
   const logout = (navigate) => {
@@ -40,6 +42,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     navigate("/")
+    toast.success('Logged out successfully!');
   };
 
   const addFavorite = async (recipeId) => {

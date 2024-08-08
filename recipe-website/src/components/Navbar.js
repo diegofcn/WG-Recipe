@@ -91,8 +91,7 @@ function Navbar() {
               </div>
             ) : (
               <div className="hidden xl:block">
-                <Link to="/api/auth/login" className="hover:text-primary text-gray-700 uppercase text-center xl:text-left" onClick={() => setIsOpen(false)}>Login</Link>
-                <Link to="/api/auth/register" className="hover:text-primary text-gray-700 uppercase text-center xl:text-left" onClick={() => setIsOpen(false)}>Register</Link>
+                <Link to="/api/auth/login" className="hover:text-primary text-gray-700 uppercase text-center xl:text-left" onClick={() => setIsOpen(false)}>Login / Register</Link>
               </div>
             )}
 
@@ -106,7 +105,7 @@ function Navbar() {
                 </>
               ) : (
                 <>
-                  <Link to="/api/auth/login" className="hover:text-primary text-gray-700 uppercase text-center xl:text-left" onClick={() => setIsOpen(false)}>Login</Link>
+                  <Link to="/api/auth/login" className="hover:text-primary text-gray-700 uppercase text-center xl:text-left mb-2" onClick={() => setIsOpen(false)}>Login</Link>
                   <Link to="/api/auth/register" className="hover:text-primary text-gray-700 uppercase text-center xl:text-left" onClick={() => setIsOpen(false)}>Register</Link>
                 </>
               )}
