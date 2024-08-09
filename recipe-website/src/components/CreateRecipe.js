@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 function CreateRecipe() {
   const { recipeId } = useParams();  // This will be undefined if creating a new recipe
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
   const [recipe, setRecipe] = useState({
     title: "",
     category: "",
@@ -223,7 +224,7 @@ return (
       </div>
 
       <div className="mb-6">
-        <h3 className="block text-gray-700 text-sm font-semibold mb-2">Tags</h3>
+        <h3 className="block text-gray-700 text-sm font-semibold mb-2">Tags  <span className="text-sm font-thin">(optional)</span></h3>
         <div className="flex items-center">
           <input
             type="text"
@@ -329,7 +330,7 @@ return (
         </div>
 
       <div className="mb-6">
-        <h3 className="block text-gray-700 text-md font-semibold mb-2">Macros</h3>
+        <h3 className="block text-gray-700 text-md font-semibold mb-2">Macros   <span className="text-sm font-thin">(optional)</span></h3>
         <div className="mb-4">
           <label htmlFor="calories" className="block text-gray-700 text-sm font-semibold mb-1">Calories</label>
           <input
