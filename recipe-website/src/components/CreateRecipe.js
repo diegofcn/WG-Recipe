@@ -79,6 +79,11 @@ function CreateRecipe() {
     });
   };
 
+  const removeIngredient = (index) => {
+    const newIngredients = recipe.ingredients.filter((_, i) => i !== index);
+    setRecipe({ ...recipe, ingredients: newIngredients });
+  };
+
   const handleInstructionChange = (index, event) => {
     const newInstructions = recipe.instructions.map((instruction, i) => {
         if (i === index) {
@@ -286,36 +291,42 @@ return (
       </div>
 
       <div className="mb-6">
-        <h3 className="block text-gray-700 text-sm font-semibold mb-2">Ingredients</h3>
-        {recipe.ingredients.map((ingredient, index) => (
-          <div key={index} className="flex items-center mb-2">
-            <input
-              type="text"
-              placeholder="Name"
-              name="name"
-              value={ingredient.name}
-              onChange={event => handleIngredientChange(index, event)}
-              className="flex-grow px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 focus:outline-none mr-2"
-            />
-            <input
-              type="text"
-              placeholder="Amount"
-              name="amount"
-              value={ingredient.amount}
-              onChange={event => handleIngredientChange(index, event)}
-              className="flex-grow px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 focus:outline-none mr-2"
-            />
-            
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={addIngredient}
-          className="mt-4 bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700"
-        >
-          Add Ingredient
-        </button>
-      </div>
+          <h3 className="block text-gray-700 text-sm font-semibold mb-2">Ingredients</h3>
+          {recipe.ingredients.map((ingredient, index) => (
+            <div key={index} className="flex items-center mb-2">
+              <input
+                type="text"
+                placeholder="Name"
+                name="name"
+                value={ingredient.name}
+                onChange={event => handleIngredientChange(index, event)}
+                className="flex-grow px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 focus:outline-none mr-2"
+              />
+              <input
+                type="text"
+                placeholder="Amount"
+                name="amount"
+                value={ingredient.amount}
+                onChange={event => handleIngredientChange(index, event)}
+                className="flex-grow px-4 py-2 border rounded-lg focus:ring focus:ring-blue-200 focus:outline-none mr-2"
+              />
+              <button
+                type="button"
+                onClick={() => removeIngredient(index)}
+                className="text-red-500 hover:text-red-700 text-sm mt-2"
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addIngredient}
+            className="mt-4 bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700"
+          >
+            Add Ingredient
+          </button>
+        </div>
 
       <div className="mb-6">
         <h3 className="block text-gray-700 text-md font-semibold mb-2">Macros</h3>
