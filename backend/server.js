@@ -189,16 +189,28 @@ app.get('/recipes/category/:categoryName', async (req, res) => {
   
 
 app.post('/api/auth/register', async (req, res) => {
-    const { username, email, password } = req.body;
-    try {
+  const { username, email, password } = req.body;
+  console.log("Received Registration Data:", req.body);
+
+  try {
+    // Check if the username or email is already in use
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    if (existingUser) {
+        return res.status(400).send('Username or email already in use');
+    }
+    
+      // Hash the password and create the user
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = new User({ username, email, password: hashedPassword });
       await user.save();
-      res.status(201).send('User registered');
-    } catch (error) {
-      res.status(400).send('Error registering user');
-    }
-  });
+      res.status(201).send({ message: 'User registered' });
+  } catch (error) {
+      console.error("Error during registration:", error);
+      res.status(500).send('Error registering user');
+  }
+});
+
+
 
   
   app.post('/api/auth/login', async (req, res) => {

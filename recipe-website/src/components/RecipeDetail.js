@@ -174,9 +174,9 @@ function RecipeDetail() {
                 className="mb-4 w-full max-w-md mt-24 shadow-lg rounded-lg"
               />
             </div>
-            <h2 className="text-xl font-semibold mb-2 mt-8 uppercase tracking-widest">Instructions</h2>
-            <hr className='mb-8'/>
-            <div className="grid grid-cols-[auto_1fr] gap-2">
+            <h2 className="ms-8 text-xl font-semibold mb-2 mt-8 uppercase tracking-widest">Instructions</h2>
+            <hr className='ms-8 mb-8'/>
+            <div className="ms-8 grid grid-cols-[auto_1fr] gap-2">
               {recipe.instructions.map((step, index) => (
                   <React.Fragment key={index}>
                       <div className="text-lg font-semibold text-gray-800 mb-8">
@@ -189,7 +189,7 @@ function RecipeDetail() {
               ))}
             </div>
             {recipe.tags && recipe.tags.length > 0 && (
-            <div className='mt-4'>
+            <div className='ms-8 mt-4'>
               <h2 className="text-xl font-semibold mb-2 uppercase tracking-widest">Tags</h2>
               <hr className='mb-6'/>
               <div className="flex flex-wrap">

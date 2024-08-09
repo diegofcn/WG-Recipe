@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../AuthContext';
 import RecipeCard from './RecipeCard';
+import { toast } from 'react-toastify';
 
 function RecipesList() {
   const { categoryName } = useParams();
@@ -27,6 +28,9 @@ function RecipesList() {
   }, [categoryName]);
 
   const handleFavorite = (recipeId) => {
+    if (!user) {
+      toast.error('You have to be logged in');
+    }
     if (user && user.favorites && user.favorites.includes(recipeId)) {
       removeFavorite(recipeId);
     } else {

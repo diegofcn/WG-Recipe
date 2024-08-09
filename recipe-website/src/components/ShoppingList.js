@@ -4,7 +4,6 @@ import { FaTrashAlt } from 'react-icons/fa';
 import { toPng } from 'html-to-image';
 import QRCode from 'qrcode.react';
 import axios from 'axios';
-import { AuthContext } from '../AuthContext';
 import { FaSpinner } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
@@ -13,7 +12,6 @@ function ShoppingList() {
   const listRef = useRef();
   const [imageUrl, setImageUrl] = useState('');
   const [qrCodeUrl, setQrCodeUrl] = useState('');
-  const { isAuthenticated } = useContext(AuthContext);
   const [loadingQr, setLoadingQr] = useState(false);
   const [loadingDownload, setLoadingDownload] = useState(false);
 
@@ -38,7 +36,7 @@ function ShoppingList() {
     if (listRef.current === null) {
         return;
       }
-    const node = document.getElementById('shopping-list');
+      
     try {
       const dataUrl = await toPng(listRef.current);
       const token = localStorage.getItem('token');

@@ -3,10 +3,12 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 import { AuthContext } from '../AuthContext';
 
 function Register() {
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
   const { register, handleSubmit, formState: { errors }, trigger } = useForm({
     mode: 'onBlur'
   });
@@ -14,17 +16,18 @@ function Register() {
 
   const onSubmit = async (formData) => {
     setLoading(true);
+    console.log("Form Data:", formData);  // Log the form data to inspect it
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/register`, formData);
-      alert('User registered successfully');
-      navigate("/api/auth/login");
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/register`, formData);
+        toast.success('User registered successfully');
+        navigate("/api/auth/login")
     } catch (error) {
-      console.error('Error registering user:', error.response ? error.response.data : error.message);
-      alert('Error registering user: ' + (error.response ? error.response.data : error.message));
+        console.error('Error registering user:', error.response ? error.response.data : error.message);
+        alert('Error registering user: ' + (error.response ? error.response.data : error.message));
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
