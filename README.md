@@ -173,6 +173,7 @@ A QR code can be created, enabling quick transfer of the shopping list to a mobi
 ## Roadmap & Future Development
 <b>Optimizations:</b>
 - Frontend performance improvements
+- Better form Validation
 - More robust backend error handling
 - Further responsive design enhancements for mobile devices
 
